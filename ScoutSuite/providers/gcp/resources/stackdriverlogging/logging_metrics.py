@@ -29,7 +29,7 @@ class LoggingMetrics(Resources):
             self._specific_filter_present(raw_metrics, 'protoPayload.methodName="SetIamPolicy" AND '
                                                        'protoPayload.serviceData.policyDelta.auditConfigDeltas:*')
         metric_dict['custom_role_change'] = \
-            self._specific_filter_present(raw_metrics, 'resource.type="iam_role" AND protoPayload.methodName =  '
+            self._specific_filter_present(raw_metrics, 'resource.type="iam_role" AND protoPayload.methodName = '
                                                        '"google.iam.admin.v1.CreateRole" OR '
                                                        'protoPayload.methodName="google.iam.admin.v1.DeleteRole" OR '
                                                        'protoPayload.methodName="google.iam.admin.v1.UpdateRole"')
@@ -45,7 +45,7 @@ class LoggingMetrics(Resources):
             self._specific_filter_present(raw_metrics, 'resource.type=gce_network AND '
                                                        'jsonPayload.event_subtype="compute.networks.insert" OR '
                                                        'jsonPayload.event_subtype="compute.networks.patch" OR '
-                                                       'jsonPayload.event_subtype="compute.networks.delete"  OR '
+                                                       'jsonPayload.event_subtype="compute.networks.delete" OR '
                                                        'jsonPayload.event_subtype="compute.networks.removePeering" OR '
                                                        'jsonPayload.event_subtype="compute.networks.addPeering"')
         metric_dict['cloud_storage_iam_permission_change'] = \
