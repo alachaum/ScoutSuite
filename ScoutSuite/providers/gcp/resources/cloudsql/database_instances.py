@@ -91,7 +91,8 @@ class DatabaseInstances(GCPCompositeResources):
         return instance_dict['id'], instance_dict
 
     def _is_log_enabled(self, raw_instance):
-        return raw_instance['settings'].get('backupConfiguration', {}).get('binaryLogEnabled')
+        backup_config = raw_instance['settings'].get('backupConfiguration', {})
+        return backup_config.get('binaryLogEnabled') or backup_config.get('replicationLogArchivingEnabled')
 
     def _is_ssl_required(self, raw_instance):
         return raw_instance['settings'].get('ipConfiguration', {}).get('requireSsl', False)
@@ -132,27 +133,30 @@ class DatabaseInstances(GCPCompositeResources):
     def _postgres_log_min_error_statement_flags(self, raw_instance):
         if 'POSTGRES' in raw_instance['databaseVersion']:
             for flag in raw_instance['settings'].get('databaseFlags', []):
-                if flag['name'] == 'log_min_error_statement' and flag['value'] is not None:
-                    return True
-            return False
+                if flag['name'] == 'log_min_error_statement' and flag['value'] is None:
+                    return False
+            # Default value on GCP is 'error'
+            return True
         else:
             return None
 
     def _postgres_log_temp_files_flags_0(self, raw_instance):
         if 'POSTGRES' in raw_instance['databaseVersion']:
             for flag in raw_instance['settings'].get('databaseFlags', []):
-                if flag['name'] == 'log_temp_files' and flag['value'] == 0:
-                    return True
-            return False
+                if flag['name'] == 'log_temp_files' and flag['value'] != 0:
+                    return False
+            # Default value on GCP is 0
+            return True
         else:
             return None
 
     def _postgres_log_min_duration_statement_flags_1(self, raw_instance):
         if 'POSTGRES' in raw_instance['databaseVersion']:
             for flag in raw_instance['settings'].get('databaseFlags', []):
-                if flag['name'] == 'log_min_duration_statement' and flag['value'] == -1:
-                    return True
-            return False
+                if flag['name'] == 'log_min_duration_statement' and flag['value'] != -1:
+                    return False
+            # Default value set by GCP is -1
+            return True
         else:
             return None
 
