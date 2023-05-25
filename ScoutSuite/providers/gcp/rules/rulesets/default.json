@@ -278,7 +278,7 @@
         ],
         "computeengine-network-default-in-use.json": [
             {
-                "enabled": true,
+                "enabled": false,
                 "level": "warning"
             }
         ],
@@ -290,7 +290,7 @@
         ],
         "computeengine-network-with-no-instances.json": [
             {
-                "enabled": true,
+                "enabled": false,
                 "level": "warning"
             }
         ],
